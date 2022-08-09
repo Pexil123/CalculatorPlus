@@ -4,10 +4,13 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.text.SpannableStringBuilder
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.aikyn.calculator.databinding.ActivityMainBinding
 import org.mariuszgromada.math.mxparser.Expression
 import java.text.DecimalFormat
+import kotlin.properties.Delegates
 
 
 class MainActivity : AppCompatActivity() {
@@ -15,17 +18,30 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
 
     var pref: SharedPreferences? = null
+    var tablePref: SharedPreferences? = null
+    var history_array = ArrayList<ListItem>()
+    var isOpened = false
+    var canOpen = true
+    var errorToast by Delegates.notNull<Toast>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        pref = getSharedPreferences("HISTORY", MODE_PRIVATE)
+        errorToast = Toast.makeText(this, "Использован недопустимый формат.", Toast.LENGTH_SHORT)
 
-        binding.input.setShowSoftInputOnFocus(false)
+        pref = getSharedPreferences("HISTORY", MODE_PRIVATE)
+        tablePref = getSharedPreferences("TABLE", MODE_PRIVATE)
+
+        binding.input.showSoftInputOnFocus = false
 
         binding.input.requestFocus()
+
+        binding.recyclerView.hasFixedSize()
+        binding.recyclerView.layoutManager = LinearLayoutManager(this,LinearLayoutManager.VERTICAL, true)
+
+        updateStateButtonHistory()
 
         binding.buttonOne.setOnClickListener {setValue("1")}
         binding.buttonTwo.setOnClickListener {setValue("2")}
@@ -102,24 +118,82 @@ class MainActivity : AppCompatActivity() {
 
         binding.buttonEquals.setOnClickListener {
 
-            val passsword = getSharedPreferences("TABLE", MODE_PRIVATE).getString("password", "123456789")
+            val passsword = tablePref?.getString("password", "123456789")
             if (binding.input.text.toString() == "$passsword+)") {
                 val i = Intent(this, SecretActivity::class.java)
                 startActivity(i)
-            }
-            if (!binding.output.text.isEmpty()) {
+            } else if (!binding.output.text.isEmpty()) {
                 saveHistory()
                 binding.input.setText(binding.output.text)
                 binding.input.setSelection(binding.output.text.length)
                 binding.output.text = ""
+            } else if (!binding.input.text.isEmpty()) {
+                errorToast.cancel()
+                errorToast.show()
             }
         }
 
         binding.buttonHistory.setOnClickListener {
-            val i = Intent(this, ActivityHistory::class.java)
-            startActivity(i)
+            if (!isOpened && canOpen) {
+                setAdapter()
+                openHistoryScreen()
+            } else if (canOpen) {
+                closeHistoryScreen()
+            }
+
         }
 
+        binding.buttonClear.setOnClickListener {
+            closeHistoryScreen()
+            clearHistory()
+            updateStateButtonHistory()
+        }
+
+    }
+
+    fun updateStateButtonHistory() {
+        if (pref?.getInt("count", -1) == -1) {
+            canOpen = false
+            binding.buttonHistory.setImageResource(R.drawable.ic_history_dark)
+        } else {
+            canOpen = true
+            binding.buttonHistory.setImageResource(R.drawable.ic_history)
+        }
+    }
+
+    fun openHistoryScreen() {
+        isOpened = true
+        binding.historyScreen.animate().apply {
+            duration = 30
+            translationXBy(900f)
+            alpha(1f)
+        }
+    }
+
+    fun closeHistoryScreen() {
+        isOpened = false
+        binding.historyScreen.animate().apply {
+            duration = 30
+            translationXBy(-900f)
+            alpha(0f)
+        }
+    }
+
+    fun clearHistory() {
+        canOpen = false
+        val editor = pref?.edit()
+        editor?.clear()?.apply()
+        history_array.clear()
+    }
+
+    fun setAdapter() {
+        if (count()!=0) {
+            history_array.clear()
+            for (i in count() downTo 1) {
+                history_array.add(ListItem(pref?.getString("exp$i", "")!!, pref?.getString("equal$i", "")!!))
+            }
+        }
+        binding.recyclerView.adapter = Adapter(history_array, this)
     }
 
     fun setValue(value: String){
@@ -159,12 +233,14 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun saveHistory(){
+        canOpen = true
         val editor = pref?.edit()
         val count = count()+1
         editor?.putInt("count", count)
         editor?.putString("exp$count", binding.input.text.toString())
         editor?.putString("equal$count", "=${binding.output.text}")
         editor?.apply()
+        updateStateButtonHistory()
     }
 
     fun count(): Int {

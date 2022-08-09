@@ -12,9 +12,6 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
-import android.text.InputFilter
-import android.text.InputType
-import android.view.LayoutInflater
 import android.view.View
 import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
@@ -22,6 +19,8 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.GridLayoutManager
 import com.aikyn.calculator.databinding.ActivitySecretBinding
+import com.aikyn.calculator.databinding.AlertDialogBinding
+import java.io.File
 import java.io.IOException
 import kotlin.properties.Delegates
 
@@ -91,11 +90,11 @@ class SecretActivity : AppCompatActivity() {
     fun showInputDialog() {
         val builder = android.app.AlertDialog.Builder(this)
 
-        val li = LayoutInflater.from(this)
-        val promptsView = li.inflate(R.layout.alert_dialog, null)
-        val input = promptsView.findViewById<EditText>(R.id.editText)
+        val dialogBinding = AlertDialogBinding.inflate(layoutInflater)
 
-        builder.setView(promptsView)
+        val input = dialogBinding.editText
+
+        builder.setView(dialogBinding.root)
 
         builder.setIcon(R.drawable.ic_lock)
 
