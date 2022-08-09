@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ImageFullActivity"
+    android:background="@color/gray">
+
+    <LinearLayout
+        android:id="@+id/linear"
+        android:layout_width="0dp"
+        android:layout_height="70dp"
+        android:background="@color/gray_2"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:gravity="start|center_vertical"
+            android:layout_marginLeft="10dp"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            android:textSize="20sp" />
+
+    </LinearLayout>
+
+    <com.aikyn.calculator.ZoomClass
+        android:id="@+id/fullImage"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@id/linear2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/linear" />
+
+    <LinearLayout
+        android:id="@+id/linear2"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:background="@color/gray_2"
+        android:orientation="horizontal"
+        android:gravity="end"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="Сохранять в галерею"
+            android:textColor="@color/teal_700"
+            android:textSize="15sp"
+            android:gravity="center_vertical|end"/>
+
+        <CheckBox
+            android:id="@+id/checkBoxSavetoGallery"
+            android:layout_width="50dp"
+            android:layout_height="match_parent"
+            android:checked="true"/>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/button_restore"
+            android:layout_width="50dp"
+            android:layout_height="match_parent"
+            android:background="@drawable/ic_restore"
+            android:foreground="?attr/selectableItemBackgroundBorderless"/>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/button_delete"
+            android:layout_width="50dp"
+            android:layout_height="match_parent"
+            android:background="@drawable/ic_delete"
+            android:foreground="?attr/selectableItemBackgroundBorderless"/>
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

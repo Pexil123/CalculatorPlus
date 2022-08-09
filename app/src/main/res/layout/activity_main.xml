@@ -1,0 +1,265 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:background="@color/black"
+    tools:context=".MainActivity">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="@color/black"
+        android:layout_marginBottom="10dp"
+        app:layout_constraintBottom_toTopOf="@+id/bar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <EditText
+            android:id="@+id/input"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/empty"
+            android:layout_marginTop="40dp"
+            android:layout_marginEnd="30dp"
+            android:layout_marginRight="30dp"
+            android:importantForAutofill="no"
+            android:gravity="center_vertical|end"
+            android:textColor="@color/white"
+            android:textIsSelectable="true"
+            android:textSize="42sp"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/output"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="30dp"
+            android:gravity="end"
+            android:textColor="@color/gray_3"
+            android:textIsSelectable="true"
+            android:textSize="30sp"
+            app:layout_constraintVertical_bias="0.7"
+            app:layout_constraintTop_toBottomOf="@id/input"
+            app:layout_constraintBottom_toTopOf="@id/backspace" />
+
+        <ImageButton
+            android:id="@+id/button_history"
+            android:layout_width="75dp"
+            android:layout_height="60dp"
+            android:paddingStart="15dp"
+            android:paddingBottom="15dp"
+            android:paddingTop="15dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/ic_history"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <ImageButton
+            android:id="@+id/backspace"
+            android:layout_width="75dp"
+            android:layout_height="60dp"
+            android:paddingEnd="15dp"
+            android:paddingBottom="15dp"
+            android:paddingTop="15dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/ic_baseline_backspace_dark_24"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <View
+        android:id="@+id/bar"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@drawable/round_shape"
+        android:layout_marginBottom="10dp"
+        android:layout_marginHorizontal="15dp"
+        app:layout_constraintBottom_toTopOf="@id/tableLayout"/>
+
+
+    <TableLayout
+        android:id="@+id/tableLayout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:stretchColumns="*"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <TableRow>
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/button_c"
+                style="@style/button_style"
+                android:layout_width="wrap_content"
+                android:layout_height="90dp"
+                android:text="c"
+                android:textColor="@color/red" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/button_bracket_start"
+                style="@style/button_style"
+                android:layout_width="wrap_content"
+                android:layout_height="90dp"
+                android:text="("
+                android:textColor="@color/green" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/button_bracket_end"
+                style="@style/button_style"
+                android:layout_width="wrap_content"
+                android:layout_height="90dp"
+                android:text=")"
+                android:textColor="@color/green" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/button_divide"
+                style="@style/button_style"
+                android:layout_width="wrap_content"
+                android:layout_height="90dp"
+                android:text="÷"
+                android:textColor="@color/green" />
+
+        </TableRow>
+
+        <TableRow>
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/button_seven"
+                style="@style/button_style"
+                android:layout_width="wrap_content"
+                android:layout_height="90dp"
+                android:text="7" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/button_eight"
+                style="@style/button_style"
+                android:layout_width="wrap_content"
+                android:layout_height="90dp"
+                android:text="8" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/button_nine"
+                style="@style/button_style"
+                android:layout_width="wrap_content"
+                android:layout_height="90dp"
+                android:text="9" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/button_multiply"
+                style="@style/button_style"
+                android:layout_width="wrap_content"
+                android:layout_height="90dp"
+                android:text="×"
+                android:textColor="@color/green" />
+
+        </TableRow>
+
+        <TableRow>
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/button_four"
+                style="@style/button_style"
+                android:layout_width="wrap_content"
+                android:layout_height="90dp"
+                android:text="4" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/button_five"
+                style="@style/button_style"
+                android:layout_width="wrap_content"
+                android:layout_height="90dp"
+                android:text="5" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/button_six"
+                style="@style/button_style"
+                android:layout_width="wrap_content"
+                android:layout_height="90dp"
+                android:text="6" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/button_minus"
+                style="@style/button_style"
+                android:layout_width="wrap_content"
+                android:layout_height="90dp"
+                android:text="-"
+                android:textColor="@color/green" />
+
+        </TableRow>
+
+        <TableRow>
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/button_one"
+                style="@style/button_style"
+                android:layout_width="wrap_content"
+                android:layout_height="90dp"
+                android:text="1" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/button_two"
+                style="@style/button_style"
+                android:layout_width="wrap_content"
+                android:layout_height="90dp"
+                android:text="2" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/button_three"
+                style="@style/button_style"
+                android:layout_width="wrap_content"
+                android:layout_height="90dp"
+                android:text="3" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/button_plus"
+                style="@style/button_style"
+                android:layout_width="wrap_content"
+                android:layout_height="90dp"
+                android:text="+"
+                android:textColor="@color/green" />
+
+        </TableRow>
+
+        <TableRow>
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/button_minus_number"
+                style="@style/button_style"
+                android:layout_width="wrap_content"
+                android:layout_height="90dp"
+                android:text="+/-"/>
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/button_zero"
+                style="@style/button_style"
+                android:layout_width="wrap_content"
+                android:layout_height="90dp"
+                android:text="0" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/button_dot"
+                style="@style/button_style"
+                android:layout_width="wrap_content"
+                android:layout_height="90dp"
+                android:text="," />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/button_equals"
+                style="@style/button_style"
+                android:layout_width="wrap_content"
+                android:layout_height="90dp"
+                android:background="@drawable/rounded_equals_button"
+                android:text="=" />
+
+        </TableRow>
+    </TableLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
