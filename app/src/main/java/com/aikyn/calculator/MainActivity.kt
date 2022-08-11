@@ -4,8 +4,10 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.text.SpannableStringBuilder
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.widget.doOnTextChanged
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.aikyn.calculator.databinding.ActivityMainBinding
 import org.mariuszgromada.math.mxparser.Expression
@@ -91,6 +93,15 @@ class MainActivity : AppCompatActivity() {
 
         }
 
+        binding.input.doOnTextChanged { text, start, before, count ->
+            if (binding.input.text.isEmpty()) {
+                binding.backspace.setImageResource(R.drawable.ic_baseline_backspace_dark_24)
+            } else {
+                binding.backspace.setImageResource(R.drawable.ic_baseline_backspace_24)
+            }
+            calculate_expression()
+        }
+
         binding.buttonC.setOnClickListener {
             binding.input.setText("")
             binding.output.text = ""
@@ -99,22 +110,27 @@ class MainActivity : AppCompatActivity() {
 
         binding.backspace.setOnClickListener {
             val cursorPos = binding.input.selectionStart
+            val cursorEndPos = binding.input.selectionEnd
             val textLen = binding.input.text.length
 
-            if (cursorPos != 0 && textLen != 0) {
+            if (cursorPos != 0 && textLen != 0 && cursorPos == cursorEndPos) {
                 val selection = binding.input.getText() as SpannableStringBuilder
                 selection.replace(cursorPos - 1, cursorPos, "")
                 binding.input.setText(selection)
                 binding.input.setSelection(cursorPos - 1)
                 calculate_expression()
             }
-
-            if (binding.input.text.isEmpty()) {
-                binding.backspace.setImageResource(R.drawable.ic_baseline_backspace_dark_24)
-            } else {
-                binding.backspace.setImageResource(R.drawable.ic_baseline_backspace_24)
+            if (cursorPos != cursorEndPos) {
+                val selection = binding.input.getText() as SpannableStringBuilder
+                selection.replace(cursorPos, cursorEndPos, "")
+                binding.input.setText(selection)
+                binding.input.setSelection(cursorPos)
+                calculate_expression()
             }
+
+            updateBackspaceState()
         }
+
 
         binding.buttonEquals.setOnClickListener {
 
@@ -135,9 +151,11 @@ class MainActivity : AppCompatActivity() {
 
         binding.buttonHistory.setOnClickListener {
             if (!isOpened && canOpen) {
+                binding.buttonHistory.setImageResource(R.drawable.ic_close_history)
                 setAdapter()
                 openHistoryScreen()
             } else if (canOpen) {
+                binding.buttonHistory.setImageResource(R.drawable.ic_history)
                 closeHistoryScreen()
             }
 
@@ -149,6 +167,14 @@ class MainActivity : AppCompatActivity() {
             updateStateButtonHistory()
         }
 
+    }
+
+    fun updateBackspaceState() {
+        if (binding.input.text.isEmpty()) {
+            binding.backspace.setImageResource(R.drawable.ic_baseline_backspace_dark_24)
+        } else {
+            binding.backspace.setImageResource(R.drawable.ic_baseline_backspace_24)
+        }
     }
 
     fun updateStateButtonHistory() {
@@ -163,19 +189,31 @@ class MainActivity : AppCompatActivity() {
 
     fun openHistoryScreen() {
         isOpened = true
+        binding.historyScreen.visibility = View.VISIBLE
         binding.historyScreen.animate().apply {
             duration = 30
-            translationXBy(900f)
             alpha(1f)
+        }.withEndAction {
+            binding.recyclerView.animate().apply {
+                duration = 30
+                alpha(1f)
+                translationYBy(-300f)
+            }.start()
         }
     }
 
     fun closeHistoryScreen() {
         isOpened = false
+        binding.historyScreen.visibility = View.GONE
         binding.historyScreen.animate().apply {
             duration = 30
-            translationXBy(-900f)
             alpha(0f)
+        }.withEndAction {
+            binding.recyclerView.animate().apply {
+                duration = 30
+                alpha(0f)
+                translationYBy(300f)
+            }.start()
         }
     }
 
@@ -206,11 +244,7 @@ class MainActivity : AppCompatActivity() {
             binding.input.setText("$leftStr$value$rightStr")
             binding.input.setSelection(cursorPos + value.length)
             calculate_expression()
-            if (binding.input.text.isEmpty()) {
-                binding.backspace.setImageResource(R.drawable.ic_baseline_backspace_dark_24)
-            } else {
-                binding.backspace.setImageResource(R.drawable.ic_baseline_backspace_24)
-            }
+            updateBackspaceState()
         }
     }
 
